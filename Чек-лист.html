@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чек-лист: создание рабочих листов и игр с DeepSeek</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e0f0ff 0%, #c8e2ff 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 30px 40px 50px;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            color: #1e3c72;
+            text-align: center;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        h1 span {
+            background: #ffd966;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.6em;
+            color: #2d4a22;
+            vertical-align: middle;
+        }
+
+        .sub {
+            text-align: center;
+            color: #2c5282;
+            margin-bottom: 35px;
+            font-style: italic;
+            border-bottom: 2px dashed #b0d4ff;
+            padding-bottom: 15px;
+        }
+
+        .step {
+            margin-bottom: 35px;
+            background: #f8fcff;
+            border-radius: 28px;
+            padding: 20px 25px;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+            border-left: 12px solid #4a90e2;
+        }
+
+        .step:hover {
+            transform: translateX(5px);
+            background: #ffffff;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .step-number {
+            background: #4a90e2;
+            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.4em;
+            box-shadow: 0 4px 8px rgba(74,144,226,0.3);
+        }
+
+        .step-title {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #1a3e6f;
+        }
+
+        .step-content {
+            color: #2c3e50;
+            line-height: 1.5;
+            padding-left: 10px;
+        }
+
+        .code-block {
+            background: #1e2a3a;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 16px;
+            font-family: 'Courier New', monospace;
+            margin: 12px 0;
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+
+        button.copy-btn {
+            background: #2c5282;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 8px;
+            transition: 0.2s;
+        }
+
+        button.copy-btn:hover {
+            background: #1a3e6f;
+            transform: scale(1.02);
+        }
+
+        .photo-placeholder {
+            background: #f0f4fa;
+            border: 3px dashed #4a90e2;
+            border-radius: 24px;
+            padding: 25px 15px;
+            margin: 20px 0 15px;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .photo-placeholder img {
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+        }
+
+        .photo-label {
+            background: #ffeed9;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 60px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #b45f06;
+            margin-top: 12px;
+        }
+
+        .warning {
+            background: #fff3e0;
+            border-left: 8px solid #f4a261;
+            padding: 15px 20px;
+            border-radius: 24px;
+            margin-top: 40px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #5a6e7c;
+            font-size: 0.85em;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, #c0d9ff, transparent);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>
+        📋 Чек-лист: создание рабочих листов и игр с DeepSeek
+        <span>🐬 с фото-подсказками</span>
+    </h1>
+    <div class="sub">✔️ от текстового документа до открытия в браузере</div>
+
+    <!-- ========= ШАГ 1 ========= -->
+    <div class="step">
+        <div class="step-header">
+            <div class="step-number">1</div>
+            <div class="step-title">Задать промт для DeepSeek</div>
+        </div>
+        <div class="step-content">
+            <p>Скопируй готовый промт ниже (или измени под свою тему). Вставь его в диалог с DeepSeek.</p>
+            <div class="code-block" id="promtText">
+                Напиши полный HTML-код для интерактивного рабочего листа по математике для 1 класса. Тема: сложение чисел от 1 до 10. Должны быть 5 примеров с полями для ввода ответов, кнопка "Проверить", вывод результата. Оформление яркое, детское, русский язык. Всё в одном HTML-файле.
+            </div>
+            <button class="copy-btn" data-copy="promtText">📋 Скопировать промт</button>
+
+            <!-- МЕСТО ДЛЯ ФОТО 1 -->
+            <div class="photo-placeholder">
+                <!-- ⬇⬇⬇ СЮДА ВСТАВЬ СВОЮ ФОТОГРАФИЮ (ШАГ 1) ⬇⬇⬇ -->
+                <img src="шаг1.png" alt="Пример как задать промт" style="max-width:100%; border-radius:16px;" onerror="this.src='https://placehold.co/600x300?text=Твое+фото+промта'; this.onerror=null;">
+                <!-- ↑↑↑ ЗАМЕНИ path/на_твою_фотографию_1.jpg ↑↑↑ -->
+                <div class="photo-label">📸 Моё фото: ввод промта в DeepSeek</div>
+                <p style="font-size:13px; color:#6c7a89; margin-top:8px;"><i>✏️ Замени ссылку на своё реальное изображение</i></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========= ШАГ 2 ========= -->
+    <div class="step">
+        <div class="step-header">
+            <div class="step-number">2</div>
+            <div class="step-title">Скопировать код ответа DeepSeek</div>
+        </div>
+        <div class="step-content">
+            <p>После того как DeepSeek сгенерирует HTML, нажми <strong>«копировать»</strong> в правом верхнем углу кода. Весь код сохрани в буфер обмена.</p>
+            <div class="photo-placeholder">
+                <!-- ⬇⬇⬇ МЕСТО ДЛЯ ФОТО 2 (скриншот кнопки копирования) ⬇⬇⬇ -->
+                <img src="копир.png" alt="Копирование кода от DeepSeek" style="max-width:100%; border-radius:16px;" onerror="this.src='https://placehold.co/600x300?text=Твое+фото+копирования+кода'; this.onerror=null;">
+                <div class="photo-label">📸 Моё фото: копируем HTML-код из DeepSeek</div>
+                <p><i>✏️ Замени на свой скриншот</i></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========= ШАГ 3 ========= -->
+    <div class="step">
+        <div class="step-header">
+            <div class="step-number">3</div>
+            <div class="step-title">Создать текстовый документ (Блокнот) на рабочем столе</div>
+        </div>
+        <div class="step-content">
+            <p>✔️ Нажми <strong>правой кнопкой мыши</strong> на рабочем столе → «Создать» → «Текстовый документ».<br>
+            ✔️ Открой его (он запустится в Блокноте).</p>
+            <div class="photo-placeholder">
+                <!-- ⬇⬇⬇ МЕСТО ДЛЯ ФОТО 3 (как создать текстовый документ) ⬇⬇⬇ -->
+                <img src="соз текст 2.png" alt="Создание текстового документа на рабочем столе" style="max-width:100%; border-radius:16px;" onerror="this.src='https://placehold.co/600x300?text=Твое+фото+создания+блокнота'; this.onerror=null;">
+                <div class="photo-label">📸 Моё фото: правой кнопкой → текстовый документ</div>
+                <p><i>✏️ Замени на собственную фотографию этого шага</i></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========= ШАГ 4 ========= -->
+    <div class="step">
+        <div class="step-header">
+            <div class="step-number">4</div>
+            <div class="step-title">Вставить код в текстовый документ</div>
+        </div>
+        <div class="step-content">
+            <p>В открытом Блокноте нажми <strong>Ctrl+V</strong> (или правой кнопкой → Вставить). Весь скопированный HTML-код появится в файле.</p>
+        </div>
+    </div>
+
+    <!-- ========= ШАГ 5 ========= -->
+    <div class="step">
+        <div class="step-header">
+            <div class="step-number">5</div>
+            <div class="step-title">Сохранить документ в формате .html</div>
+        </div>
+        <div class="step-content">
+            <ul style="margin-left: 20px;">
+                <li>Нажми <strong>«Файл» → «Сохранить как»</strong>.</li>
+                <li>В поле «Имя файла» напиши: <code class="code-block" style="display: inline-block; background:#eef2f5; padding:2px 8px;">урок_deepseek.html</code></li>
+                <li><strong>ОЧЕНЬ ВАЖНО:</strong> В поле «Тип файла» выбери <strong>«Все файлы (*.*)»</strong>.</li>
+                <li>Нажми «Сохранить» и закрой Блокнот.</li>
+            </ul>
+            <div class="warning">
+                ⚠️ Если не выбрать «Все файлы» — файл сохранится как <strong>урок_deepseek.html.txt</strong> и не откроется в браузере как страница!
+            </div>
+        </div>
+    </div>
+
+    <!-- ========= ШАГ 6 ========= -->
+    <div class="step">
+        <div class="step-header">
+            <div class="step-number">6</div>
+            <div class="step-title">Открыть в браузере</div>
+        </div>
+        <div class="step-content">
+            <p>На рабочем столе появился файл <strong>урок_deepseek.html</strong> с иконкой браузера. <br>
+            Дважды кликни по нему левой кнопкой мыши — игра или рабочий лист запустятся в браузере! 🎉</p>
+            <div class="photo-placeholder">
+                <!-- дополнительное место для финального фото (можно тоже вставить или оставить как запасное) -->
+                <img src="умножение.png" alt="Файл открывается в браузере" style="max-width:100%; border-radius:16px;" onerror="this.src='https://placehold.co/600x300?text=Фото+успешного+открытия+в+браузере'; this.onerror=null;">
+                <div class="photo-label">📸 Моё фото: результат открыт в Chrome/Edge</div>
+            </div>
+        </div>
+    </div>
+    <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чек-лист: создание рабочих листов и игр с DeepSeek</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e0f0ff 0%, #c8e2ff 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 30px 40px 50px;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            color: #1e3c72;
+            text-align: center;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        h1 span {
+            background: #ffd966;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.6em;
+            color: #2d4a22;
+            vertical-align: middle;
+        }
+
+        .sub {
+            text-align: center;
+            color: #2c5282;
+            margin-bottom: 35px;
+            font-style: italic;
+            border-bottom: 2px dashed #b0d4ff;
+            padding-bottom: 15px;
+        }
+
+        .step {
+            margin-bottom: 35px;
+            background: #f8fcff;
+            border-radius: 28px;
+            padding: 20px 25px;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+            border-left: 12px solid #4a90e2;
+        }
+
+        .step:hover {
+            transform: translateX(5px);
+            background: #ffffff;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .step-number {
+            background: #4a90e2;
+            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.4em;
+            box-shadow: 0 4px 8px rgba(74,144,226,0.3);
+        }
+
+        .step-title {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #1a3e6f;
+        }
+
+        .step-content {
+            color: #2c3e50;
+            line-height: 1.5;
+            padding-left: 10px;
+        }
+
+        .code-block {
+            background: #1e2a3a;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 16px;
+            font-family: 'Courier New', monospace;
+            margin: 12px 0;
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+
+        button.copy-btn {
+            background: #2c5282;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 8px;
+            transition: 0.2s;
+        }
+
+        button.copy-btn:hover {
+            background: #1a3e6f;
+            transform: scale(1.02);
+        }
+
+        .photo-placeholder {
+            background: #f0f4fa;
+            border: 3px dashed #4a90e2;
+            border-radius: 24px;
+            padding: 25px 15px;
+            margin: 20px 0 15px;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .photo-placeholder img {
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+        }
+
+        .photo-label {
+            background: #ffeed9;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 60px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #b45f06;
+            margin-top: 12px;
+        }
+
+        .warning {
+            background: #fff3e0;
+            border-left: 8px solid #f4a261;
+            padding: 15px 20px;
+            border-radius: 24px;
+            margin-top: 40px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #5a6e7c;
+            font-size: 0.85em;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, #c0d9ff, transparent);
+        }
+       <footer>
+        ✅ Чек-лист создан с помощью DeepSeek. Вставь свои скриншоты в отмеченные места — и получи готовую инструкцию с картинками.
+    </footer>
+</div>
+
+<script>
+    // Функция для копирования текста
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-copy');
+            const textToCopy = document.getElementById(targetId).innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = this.innerText;
+                this.innerText = '✅ Скопировано!';
+                setTimeout(() => {
+                    this.innerText = originalText;
+                }, 2000);
+            }).catch(() => {
+                alert('Не удалось скопировать, выделите текст вручную');
+            });
+        });
+    });
+</script>
+</body>
+</html>
+<script>
+    // Функция для копирования текста
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-copy');
+            const textToCopy = document.getElementById(targetId).innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = this.innerText;
+                this.innerText = '✅ Скопировано!';
+                setTimeout(() => {
+                    this.innerText = originalText;
+                }, 2000);
+            }).catch(() => {
+                alert('Не удалось скопировать, выделите текст вручную');
+            });
+        });
+    });
+</script>
+</body>
+</html>
